@@ -2,7 +2,13 @@
 
 namespace Frc\WP\Env\Heroku\PHPConst;
 
-$env = (!empty(getenv())) ? getenv() : $_SERVER;
+$all_envs = $_ENV;
+
+if(version_compare(phpversion(), '7.1') >= 0 && empty($all_envs)) {
+    $all_envs = getenv();
+}
+
+$env = (!empty($all_envs)) ? $all_envs : $_SERVER;
 
 $all_frc_php_const_env_keys = array_filter(array_keys($env), function ( $k ) {
     return preg_match('/^FRC_PHP_CONST_/', $k);
